@@ -6,6 +6,7 @@ using PluginAPI.Enums;
 using PluginAPI.Helpers;
 using PluginAPI.Events;
 using AutoEvent.Events.Handlers;
+using AutoEvent.YamlEvents;
 using GameCore;
 using Event = AutoEvent.Interfaces.Event;
 
@@ -42,11 +43,16 @@ namespace AutoEvent
 
             Event.RegisterEvents();
             
-            // Load External Events.
+            
             if (!Directory.Exists(Path.Combine(Paths.GlobalPlugins.Plugins, "Events")))
             {
                 Directory.CreateDirectory(Path.Combine(Paths.GlobalPlugins.Plugins, "Events"));
             }
+            //Load Yaml Events.
+            new YamlEventLoader();
+            YamlEventLoader.Singleton.LoadYamlEvents();
+            
+            // Load External Events.
             Loader.LoadEvents();
             Event.Events.AddRange(Loader.Events);
             
