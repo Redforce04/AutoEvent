@@ -34,11 +34,16 @@ namespace AutoEvent.Interfaces
 
             foreach (Type type in types)
             {
+                if (type is null)
+                {
+                    continue;
+                }
                 try
                 {
                     if (type.IsAbstract ||
                         type.IsEnum ||
                         type.IsInterface ||
+                        (type.Name != "Event" && type.BaseType?.Name != "Event") || 
                         Activator.CreateInstance(type) is not Event ev ||
                         type.GetCustomAttributes(typeof(DisabledFeaturesAttribute), false).Any())
                         continue;

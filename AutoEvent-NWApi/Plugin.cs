@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using AutoEvent.CedModIntegration;
 using AutoEvent.Interfaces;
 using HarmonyLib;
 using PluginAPI.Core.Attributes;
@@ -7,6 +8,7 @@ using PluginAPI.Helpers;
 using PluginAPI.Events;
 using AutoEvent.Events.Handlers;
 using GameCore;
+using MEC;
 using Event = AutoEvent.Interfaces.Event;
 
 namespace AutoEvent
@@ -28,12 +30,22 @@ namespace AutoEvent
         [PluginEntryPoint("AutoEvent-NWApi", "8.2.7", "A plugin that allows you to run mini-games.", "KoT0XleB")]
         void OnEnabled()
         {
+            CosturaUtility.Initialize();
+            _onEnabled();
+        }
+        void _onEnabled()
+        {
             if (!Config.IsEnabled) return;
 
             Singleton = this;
             HarmonyPatch = new Harmony("autoevent-nwapi");
             HarmonyPatch.PatchAll();
 
+           
+            Timing.CallDelayed(2, () =>
+            {
+                var cedModEventLoader = new CedModEventLoader();
+            });
             EventManager.RegisterEvents(this);
             SCPSLAudioApi.Startup.SetupDependencies();
 
