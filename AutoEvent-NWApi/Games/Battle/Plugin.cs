@@ -19,45 +19,40 @@ namespace AutoEvent.Games.Battle
         public override string Author { get; set; } = "KoT0XleB";
         public override string MapName { get; set; } = "Battle";
         public override string CommandName { get; set; } = "battle";
-        SchematicObject GameMap { get; set; }
-        List<GameObject> Workstations { get; set; }
-        TimeSpan EventTime { get; set; }
-        EventHandler _eventHandler { get; set; }
+        public override string SoundName { get; set; } = "MetalGearSolid.ogg";
+        // SchematicObject GameMap { get; set; }
+        // List<GameObject> Workstations { get; set; }
+        // TimeSpan EventTime { get; set; }
+        // EventHandler _eventHandler { get; set; }
 
         public override void OnStart()
         {
-            _eventHandler = new EventHandler();
-
-            EventManager.RegisterEvents(_eventHandler);
-            Servers.TeamRespawn += _eventHandler.OnTeamRespawn;
-            Servers.SpawnRagdoll += _eventHandler.OnSpawnRagdoll;
-            Servers.PlaceBullet += _eventHandler.OnPlaceBullet;
-            Servers.PlaceBlood += _eventHandler.OnPlaceBlood;
-            Players.DropItem += _eventHandler.OnDropItem;
-            Players.DropAmmo += _eventHandler.OnDropAmmo;
+            EventManager.RegisterEvents(EventHandler);
+            Servers.TeamRespawn += ((EventHandler)EventHandler).OnTeamRespawn;
+            Servers.SpawnRagdoll += ((EventHandler)EventHandler).OnSpawnRagdoll;
+            Servers.PlaceBullet += ((EventHandler)EventHandler).OnPlaceBullet;
+            Servers.PlaceBlood += ((EventHandler)EventHandler).OnPlaceBlood;
+            Players.DropItem += ((EventHandler)EventHandler).OnDropItem;
+            Players.DropAmmo += ((EventHandler)EventHandler).OnDropAmmo;
 
             OnEventStarted();
         }
         public override void OnStop()
         {
-            EventManager.UnregisterEvents(_eventHandler);
-            Servers.TeamRespawn -= _eventHandler.OnTeamRespawn;
-            Servers.SpawnRagdoll -= _eventHandler.OnSpawnRagdoll;
-            Servers.PlaceBullet -= _eventHandler.OnPlaceBullet;
-            Servers.PlaceBlood -= _eventHandler.OnPlaceBlood;
-            Players.DropItem -= _eventHandler.OnDropItem;
-            Players.DropAmmo -= _eventHandler.OnDropAmmo;
+            EventManager.UnregisterEvents(EventHandler);
+            Servers.TeamRespawn -= ((EventHandler)EventHandler).OnTeamRespawn;
+            Servers.SpawnRagdoll -= ((EventHandler)EventHandler).OnSpawnRagdoll;
+            Servers.PlaceBullet -= ((EventHandler)EventHandler).OnPlaceBullet;
+            Servers.PlaceBlood -= ((EventHandler)EventHandler).OnPlaceBlood;
+            Players.DropItem -= ((EventHandler)EventHandler).OnDropItem;
+            Players.DropAmmo -= ((EventHandler)EventHandler).OnDropAmmo;
 
-            _eventHandler = null;
+            EventHandler = null;
             Timing.CallDelayed(10f, () => EventEnd());
         }
 
         public void OnEventStarted()
         {
-            EventTime = new TimeSpan(0, 0, 0);
-            GameMap = Extensions.LoadMap(MapName, new Vector3(6f, 1030f, -43.5f), Quaternion.Euler(Vector3.zero), Vector3.one);
-            Extensions.PlayAudio("MetalGearSolid.ogg", 10, false, Name);
-
             int count = 0;
             foreach (Player player in Player.GetPlayers())
             {

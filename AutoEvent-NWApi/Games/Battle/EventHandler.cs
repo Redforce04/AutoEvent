@@ -6,10 +6,11 @@ using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
 using PluginAPI.Events;
 using System.Collections.Generic;
+using AutoEvent.Interfaces;
 
 namespace AutoEvent.Games.Battle
 {
-    public class EventHandler
+    public class EventHandler : Interfaces.EventHandler
     {
         [PluginEvent(ServerEventType.PlayerJoined)]
         public void OnJoin(PlayerJoinedEvent ev)

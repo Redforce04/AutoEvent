@@ -70,13 +70,13 @@ namespace AutoEvent.Commands
                         player.ClearInventory();
                     }
 
-                    ev.OnStart();
+                    ev.InternalStart();
                     AutoEvent.ActiveEvent = ev;
                 });
             }
             else
             {
-                ev.OnStart();
+                ev.InternalStart();
                 AutoEvent.ActiveEvent = ev;
             }
 

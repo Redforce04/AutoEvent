@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AutoEvent.API.Schematic.Objects;
+using UnityEngine;
 
 namespace AutoEvent.Interfaces
 {
@@ -13,7 +15,13 @@ namespace AutoEvent.Interfaces
         public abstract string Description { get; set; }
         public abstract string Author { get; set; }
         public abstract string MapName { get; set; }
+        public abstract string SoundName { get; set; }
         public abstract string CommandName { get; set; }
+        
+        public virtual SchematicObject GameMap { get; set; }
+        public virtual List<GameObject> Workstations { get; set; }
+        public virtual TimeSpan EventTime { get; set; }
+        public virtual EventHandler EventHandler { get; set; }        
         public virtual bool UsesExiled => false;
         /// <summary>
         /// If using NwApi or Exiled as the base plugin, set this to false, and manually add your plugin to Event.Events (List[Events]).
@@ -22,8 +30,36 @@ namespace AutoEvent.Interfaces
         public virtual bool AutoLoad => true;
 
         public virtual void RegisterEvent() { }
-        public virtual void OnStart() => throw new NotImplementedException("cannot start event because OnStart method has not implemented");
-        public virtual void OnStop() => throw new NotImplementedException("cannot start event because OnStop method has not implemented");
+        public virtual void OnStart() => throw new NotImplementedException("cannot start event because OnStart method has not been implemented");
+        public virtual void OnStop() => throw new NotImplementedException("cannot start event because OnStop method has not been implemented");
+        public virtual bool IsRoundDone() => throw new NotImplementedException("cannot start event because IsRoundDone method has not been implemented");
+
+        internal void InternalStart()
+        {
+            EventHandler = new EventHandler();
+            EventTime = new TimeSpan(0, 0, 0);
+            if (!string.IsNullOrEmpty(MapName))
+            {
+                GameMap = Extensions.LoadMap(MapName, new Vector3(6f, 1030f, -43.5f), Quaternion.Euler(Vector3.zero), Vector3.one);
+            }
+            if (!string.IsNullOrEmpty(SoundName))
+            {
+                Extensions.PlayAudio(SoundName, 10, false, Name);
+            }
+            
+            OnStart();
+        }
+
+        internal void InternalStop()
+        {
+            OnStop();
+        }
+
+        internal bool InternalIsRoundDone()
+        {
+            return IsRoundDone();
+        }
+        
         public int Id { get; private set; }
         public static List<Event> Events { get; set; } = new List<Event>();
         
