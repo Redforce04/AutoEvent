@@ -15,6 +15,9 @@ using CommandSystem;
 using MEC;
 using PluginAPI.Core;
 using SCPSLAudioApi.AudioCore;
+#if EXILED
+using Exiled.Permissions.Extensions;
+#endif
 
 namespace AutoEvent.Commands;
 
@@ -28,13 +31,27 @@ public class Volume : ICommand
         {
             try
             {
-                if (!AutoEvent.Singleton.Config.PermissionList.Contains(
-                        ServerStatic.PermissionsHandler._members[Player.Get(sender).UserId]))
+#if EXILED
+                if (!((CommandSender)sender).CheckPermission("ev.volume"))
+                {
+                    response = "You do not have permission to use this command";
+                    return false;
+                }
+#else
+                var config = AutoEvent.Singleton.Config;
+                var player = Player.Get(sender);
+                if (sender is ServerConsoleSender || sender is CommandSender cmdSender && cmdSender.FullPermissions)
+                {
+                    goto skipPermissionCheck;
+                }
+                if (!config.PermissionList.Contains(ServerStatic.PermissionsHandler._members[player.UserId]))
                 {
                     response = "<color=red>You do not have permission to use this command!</color>";
                     return false;
                 }
-
+#endif     
+                skipPermissionCheck:
+                
                 if (arguments.Count != 1)
                 {
                     response =
