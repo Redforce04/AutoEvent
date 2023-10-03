@@ -76,4 +76,10 @@
     <Content Include="FodyWeavers.xml" />
     <Content Include="PlantUMLDocuments\*" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Games\Dodgeball" />
+    <Folder Include="Games\KingOfTheHill" />
+    <Folder Include="Games\MurderMystery" />
+    <Folder Include="Games\Spleef" />
+  </ItemGroup>
 </Project>
