@@ -16,7 +16,6 @@ namespace AutoEvent.Games.Trouble
         public override string Description { get; set; } = AutoEvent.Singleton.Translation.TroubleTranslate.Description;
         public override string Author { get; set; } = "KoT0XleB";
         public override string CommandName { get; set; } = AutoEvent.Singleton.Translation.TroubleTranslate.CommandName;
-        public override Version Version { get; set; } = new Version(1, 0, 0);
         [EventConfig] public TroubleConfig Config { get; set; }
         public MapInfo MapInfo { get; set; } = new MapInfo()
             { MapName = "AmongUs", Position = new Vector3(115.5f, 1030f, -43.5f), MapRotation = Quaternion.identity };
@@ -26,7 +25,7 @@ namespace AutoEvent.Games.Trouble
         protected override float PostRoundDelay { get; set; } = 10f;
         private EventHandler EventHandler { get; set; }
         private TroubleTranslate Translation { get; set; } = AutoEvent.Singleton.Translation.TroubleTranslate;
-        public override Version Version { get; set; } = new Version(1, 0, 0);
+        public override Version Version { get; set; } = new Version(1, 0, 1);
 
         protected override void RegisterEvents()
         {

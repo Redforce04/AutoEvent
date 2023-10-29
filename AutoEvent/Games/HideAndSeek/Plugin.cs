@@ -26,8 +26,11 @@ namespace AutoEvent.Games.HideAndSeek
         public override string Description { get; set; } = AutoEvent.Singleton.Translation.HideTranslate.HideDescription;
         public override string Author { get; set; } = "KoT0XleB";
         public override string CommandName { get; set; } = AutoEvent.Singleton.Translation.HideTranslate.HideCommandName;
-        public override Version Version { get; set; } = new Version(1, 0, 0);
+        public override Version Version { get; set; } = new Version(1, 0, 1);
 
+        protected override FriendlyFireSettings ForceEnableFriendlyFire { get; set; } = FriendlyFireSettings.Disable;
+
+        protected override FriendlyFireSettings ForceEnableFriendlyFireAutoban { get; set; } = FriendlyFireSettings.Disable;
         [EventConfig]
         public HideAndSeekConfig Config { get; set; }
         public MapInfo MapInfo { get; set; } = new MapInfo()

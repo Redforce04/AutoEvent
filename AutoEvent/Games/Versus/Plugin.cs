@@ -23,14 +23,17 @@ namespace AutoEvent.Games.Versus
         public override string Description { get; set; } = AutoEvent.Singleton.Translation.VersusTranslate.VersusDescription;
         public override string Author { get; set; } = "KoT0XleB";
         public override string CommandName { get; set; } = AutoEvent.Singleton.Translation.VersusTranslate.VersusCommandName;
-        public override Version Version { get; set; } = new Version(1, 0, 0);
+        public override Version Version { get; set; } = new Version(1, 0, 1);
+        protected override FriendlyFireSettings ForceEnableFriendlyFire { get; set; } = FriendlyFireSettings.Disable;
+
+        protected override FriendlyFireSettings ForceEnableFriendlyFireAutoban { get; set; } = FriendlyFireSettings.Disable;
         [EventConfig]
+        
         public VersusConfig Config { get; set; }
         public MapInfo MapInfo { get; set; } = new MapInfo()
             {MapName = "35Hp", Position = new Vector3(6f, 1015f, -5f), };
         public SoundInfo SoundInfo { get; set; } = new SoundInfo()
             { SoundName = "Knife.ogg", Volume = 10, Loop = true };
-        protected override FriendlyFireSettings ForceEnableFriendlyFire { get; set; } = FriendlyFireSettings.Disable;
         private EventHandler EventHandler { get; set; }
         private VersusTranslate Translation { get; set; } = AutoEvent.Singleton.Translation.VersusTranslate;
         public Player Scientist { get; set; }
