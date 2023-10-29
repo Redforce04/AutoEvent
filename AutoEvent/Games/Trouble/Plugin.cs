@@ -6,6 +6,7 @@ using AutoEvent.Interfaces;
 using UnityEngine;
 using Event = AutoEvent.Interfaces.Event;
 using Player = PluginAPI.Core.Player;
+using System;
 
 namespace AutoEvent.Games.Trouble
 {
@@ -25,6 +26,7 @@ namespace AutoEvent.Games.Trouble
         protected override float PostRoundDelay { get; set; } = 10f;
         private EventHandler EventHandler { get; set; }
         private TroubleTranslate Translation { get; set; } = AutoEvent.Singleton.Translation.TroubleTranslate;
+        public override Version Version { get; set; } = new Version(1, 0, 0);
 
         protected override void RegisterEvents()
         {
@@ -56,22 +58,20 @@ namespace AutoEvent.Games.Trouble
 
         protected override void OnStart()
         {
-            // random class - scientist / mtf / guard
             foreach (Player player in Player.GetPlayers())
             {
-                player.GiveLoadout(Config.PlayerLoadouts);
+                //player.GiveLoadout(Config.PlayerLoadouts);
                 player.Position = RandomPosition.GetSpawnPosition(MapInfo.Map);
             }
 
             Player traitor = Player.GetPlayers().RandomItem();
-            traitor.GiveLoadout(Config.TraitorLoadouts);
-            // change skin to human
+            Extensions.SetRole(traitor, PlayerRoles.RoleTypeId.Scp3114, PlayerRoles.RoleSpawnFlags.AssignInventory);
         }
 
         protected override bool IsRoundDone()
         {
             if (Player.GetPlayers().Count(r => r.IsHuman) > Player.GetPlayers().Count(r => r.IsSCP) 
-                && EventTime.TotalMinutes < 5) return false;
+                && EventTime.TotalMinutes < 3) return false;
             else return true;
         }
 
@@ -80,7 +80,7 @@ namespace AutoEvent.Games.Trouble
             // Trouble in Terrorist Town
             Extensions.Broadcast($"{Name}\n" +
                 $"<color=red>{Player.GetPlayers().Count(r => r.IsSCP)} traitors</color> | " +
-                $"<color=cyan>{Player.GetPlayers().Count(r => r.IsHuman)} guys</color>", 1);
+                $"<color=#00FFFF>{Player.GetPlayers().Count(r => r.IsHuman)} guys</color>", 1);
         }
 
         protected override void OnFinished()
