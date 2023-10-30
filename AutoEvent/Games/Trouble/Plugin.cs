@@ -7,11 +7,20 @@ using UnityEngine;
 using Event = AutoEvent.Interfaces.Event;
 using Player = PluginAPI.Core.Player;
 using System;
+using System.Collections.Generic;
+using PlayerRoles;
+using PlayerRoles.FirstPersonControl;
+using PlayerRoles.PlayableScps.Scp3114;
+using PlayerRoles.Ragdolls;
 
 namespace AutoEvent.Games.Trouble
 {
-    public class Plugin : Event, IEventMap, IInternalEvent
+    public class Plugin : Event, IEventMap, IInternalEvent, ITag
     {
+        public List<Tag> Tags { get; set; } = new List<Tag>()
+        {
+            new Tag("Halloween3", TagColor.purple)
+        };
         public override string Name { get; set; } = AutoEvent.Singleton.Translation.TroubleTranslate.Name;
         public override string Description { get; set; } = AutoEvent.Singleton.Translation.TroubleTranslate.Description;
         public override string Author { get; set; } = "KoT0XleB";
@@ -65,6 +74,8 @@ namespace AutoEvent.Games.Trouble
 
             Player traitor = Player.GetPlayers().RandomItem();
             Extensions.SetRole(traitor, PlayerRoles.RoleTypeId.Scp3114, PlayerRoles.RoleSpawnFlags.AssignInventory);
+            //if (traitor.RoleBase is PlayerRoles.PlayableScps.Scp3114.Scp3114Role scpRole)
+            //    scpRole._identity;
         }
 
         protected override bool IsRoundDone()
@@ -100,5 +111,6 @@ namespace AutoEvent.Games.Trouble
                     $"Draw | no one won", 1);
             }
         }
+
     }
 }

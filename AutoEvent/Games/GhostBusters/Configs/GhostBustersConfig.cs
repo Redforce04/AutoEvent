@@ -33,7 +33,7 @@ public class GhostBustersConfig : EventConfig
 
     public Dictionary<GhostBusterClassType, GhostAbility> Abilities { get; set; } = new()
     {
-        { GhostBusterClassType.GhostBall, new GhostAbility(2, 0, 20) },
+        { GhostBusterClassType.GhostBall, new GhostAbility(1, 0, 20) },
         { GhostBusterClassType.GhostExplosive, new GhostAbility(2, 0, 20) },
         { GhostBusterClassType.GhostFlash, new GhostAbility(2, 5, 20) },
         { GhostBusterClassType.GhostLockdown, new GhostAbility(2, 5, 20) },

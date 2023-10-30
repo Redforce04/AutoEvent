@@ -10,7 +10,7 @@ namespace AutoEvent.Games.Trouble
 #endif
     {
         public string CommandName { get; set; } = "trouble";
-        public string Name { get; set; } = "Trouble in Terrorist Town <color=purple>[Halloween]</color>";
+        public string Name { get; set; } = "Trouble in Terrorist Town";
         public string Description { get; set; } = "An impostor appeared in terrorist town.";
         public string BeforeStart { get; set; } = "<color=#D71868><b><i>{name}</i></b></color>\n<color=#ABF000>There are <color=red>{time}</color> seconds left before the game starts.</color>";
         public string Cycle { get; set; } = "<color=#D71868><b><i>{name}</i></b></color>\n<color=yellow>Humans left: <color=green>{count}</color></color>\n<color=yellow>Elapsed Duration: <color=red>{time}</color></color>";

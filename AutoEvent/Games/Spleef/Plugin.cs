@@ -50,6 +50,9 @@ public class Plugin : Event, IEventMap, IEventSound
     public SoundInfo SoundInfo { get; set; } = new SoundInfo()
         { SoundName = "Puzzle.ogg", Volume = 15, Loop = true };
 
+    protected override FriendlyFireSettings ForceEnableFriendlyFireAutoban { get; set; } = FriendlyFireSettings.Disable;
+    protected override FriendlyFireSettings ForceEnableFriendlyFire { get; set; } = FriendlyFireSettings.Disable;
+
     /// <summary>
     /// A local list of platforms that changes round to round.
     /// </summary>

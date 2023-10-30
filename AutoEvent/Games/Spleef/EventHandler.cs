@@ -54,6 +54,15 @@ public class EventHandler
         });
     }
 
+    [PluginEvent(ServerEventType.PlayerDamage)]
+    public bool OnDamage(PlayerDamageEvent ev)
+    {
+        if (ev.DamageHandler is FirearmDamageHandler)
+        {
+            return false;
+        }
+        return true;
+    }
 
     public void OnTeamRespawn(TeamRespawnArgs ev) => ev.IsAllowed = false;
     public void OnSpawnRagdoll(SpawnRagdollArgs ev) => ev.IsAllowed = false;

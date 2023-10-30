@@ -38,6 +38,7 @@ namespace AutoEvent.Games.HideAndSeek
             if (ev.Attacker != null)
             {
                 ev.IsAllowed = false;
+                
                 bool isAttackerTagger = ev.Attacker.Items.Any(r => r.ItemTypeId == _plugin.Config.TaggerWeapon) || ev.Attacker.EffectsManager.GetEffect<MarshmallowEffect>();
                 bool isTargetTagger = ev.Target.Items.Any(r => r.ItemTypeId == _plugin.Config.TaggerWeapon) || ev.Attacker.EffectsManager.GetEffect<MarshmallowEffect>();
                 if (!isAttackerTagger || isTargetTagger)

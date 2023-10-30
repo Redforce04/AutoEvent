@@ -7,6 +7,7 @@ using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
 using PluginAPI.Events;
 using System.Linq;
+using InventorySystem.Items.MarshmallowMan;
 
 namespace AutoEvent.Games.Trouble
 {
@@ -20,6 +21,7 @@ namespace AutoEvent.Games.Trouble
 
         public void OnPlayerDamage(PlayerDamageArgs ev)
         {
+            
         }
 
         [PluginEvent(ServerEventType.PlayerJoined)]

@@ -39,6 +39,9 @@ namespace AutoEvent.Commands
                 builder.AppendLine("\"List of events:");
             }
 
+            string colorWhite = IsConsoleCommandSender ? "" : "<color=white>";
+            string colorReset = IsConsoleCommandSender ? "" : "</color>";
+
             // ReSharper disable once SuspiciousTypeConversion.Global
             Dictionary<string, List<Event>> events = new Dictionary<string, List<Event>>()
             {
@@ -58,7 +61,6 @@ namespace AutoEvent.Commands
                 string color = "white";
                 switch (eventlist.Key)
                 {
-
                     case "Internal Events":
                         color = "red";
                         builder.AppendLine($"{(!IsConsoleCommandSender ? "<color=white>" : "")}[{(!IsConsoleCommandSender ? $"<color={color}>" : "")}==AutoEvent Events=={(!IsConsoleCommandSender ? "<color=white>" : "")}]");
@@ -79,10 +81,18 @@ namespace AutoEvent.Commands
                 
                 foreach (Event ev in eventlist.Value)
                 {
+                    string tags = "";
+                    if (ev is ITag tagList)
+                    {
+                        foreach (var item in tagList.Tags)
+                        {
+                            tags += $" {colorWhite}[{(IsConsoleCommandSender ? $"<color={item.Color.ToString()}>" : "")}{item}{colorWhite}]{colorReset}";
+                        }
+                    }
                     if (ev is IHidden) continue;
                     if (!IsConsoleCommandSender)
                         builder.AppendLine(
-                            $"<color={color}>{ev.Name}</color> [<color=yellow>{ev.CommandName}</color>]: <color=white>{ev.Description}</color>");
+                            $"<color={color}>{ev.Name}</color> [<color=yellow>{ev.CommandName}</color>]{tags}: <color=white>{ev.Description}</color>");
                     else
                         builder.AppendLine($"{ev.Name} [{ev.CommandName}]: {ev.Description}");
                 }

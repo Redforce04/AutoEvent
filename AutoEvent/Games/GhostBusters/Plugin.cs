@@ -41,7 +41,7 @@ using Event = AutoEvent.Interfaces.Event;
 
 namespace AutoEvent.Games.GhostBusters;
 
-public class Plugin : Event, IInternalEvent//, IEventSound
+public class Plugin : Event, IInternalEvent, IEventSound
     {
         public override string Name { get; set; } = AutoEvent.Singleton.Translation.GhostBustersTranslate.GhostBustersName;
         public override string Description { get; set; } = AutoEvent.Singleton.Translation.GhostBustersTranslate.GhostBustersDescription;
@@ -68,7 +68,7 @@ public class Plugin : Event, IInternalEvent//, IEventSound
         public Dictionary<ItemType, float> Damages = new Dictionary<ItemType, float>()
         {
             { ItemType.GrenadeHE, 600 },
-            { ItemType.MicroHID, 10 },
+            { ItemType.MicroHID, 3 },
             // { ItemType.SCP018, 600 },
             { ItemType.ParticleDisruptor, 75 },
             { ItemType.Jailbird, 50 },
@@ -77,6 +77,7 @@ public class Plugin : Event, IInternalEvent//, IEventSound
         public enum Stage { Prep, PreMidnight, Midnight }
         protected override void RegisterEvents()
         {
+            this.Hunters = new List<Player>();
             Loadouts = new Loadouts(this);
             this.Classes = new Dictionary<Player, GhostBusterClass>();
             EventHandler = new EventHandler(this);
@@ -235,6 +236,7 @@ public class Plugin : Event, IInternalEvent//, IEventSound
                 ply.HideMenu();
                 if (ply.IsAlive && this.IsHunter(ply))
                 {
+                    ply.Health = 200;
                     continue;
                 }
                 if (!ply.IsAlive)

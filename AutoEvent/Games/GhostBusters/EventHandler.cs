@@ -10,6 +10,7 @@
 //    Created Date:     10/28/2023 1:51 AM
 // -----------------------------------------
 
+using AutoEvent.API.Enums;
 using AutoEvent.Events.EventArgs;
 using AutoEvent.Games.GhostBusters.Features;
 using CustomPlayerEffects;
@@ -116,22 +117,22 @@ public class EventHandler
             return true;
         }
 
-        /*if (ev.DamageHandler is Scp018DamageHandler ball)
+        if (ev.DamageHandler is Scp018DamageHandler ball)
         {
             if (targetIsGhost && attackerIsGhost)
-                return true;
+                return false;
             
             if (!targetIsGhost && !attackerIsGhost)
                 return true;
             
             if (targetIsGhost && !attackerIsGhost)
             {
-                disruptor.Damage = _plugin.Damages[ItemType.ParticleDisruptor];
+                //ball.Damage = _plugin.Damages[ItemType.ParticleDisruptor];
                 return true;
             }
              
-            return true;
-        }*/
+            return false;
+        }
         if (ev.DamageHandler is MicroHidDamageHandler micro)
         {
             if (targetIsGhost && attackerIsGhost)
@@ -141,6 +142,10 @@ public class EventHandler
                 return false;
 
             micro.Damage = _plugin.Damages[ItemType.MicroHID];
+            if (targetIsGhost)
+            {
+                ev.Target.GiveEffect(StatusEffect.SinkHole, 1, 1, false);
+            }
             return true;
         }
 
