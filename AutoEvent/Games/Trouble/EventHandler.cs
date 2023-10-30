@@ -7,7 +7,6 @@ using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
 using PluginAPI.Events;
 using System.Linq;
-using InventorySystem.Items.MarshmallowMan;
 
 namespace AutoEvent.Games.Trouble
 {
@@ -21,12 +20,17 @@ namespace AutoEvent.Games.Trouble
 
         public void OnPlayerDamage(PlayerDamageArgs ev)
         {
+            if (ev.Attacker.Role == RoleTypeId.Scp3114)
+            {
+                ev.Amount = 30;
+            }
             
         }
 
         [PluginEvent(ServerEventType.PlayerJoined)]
         public void OnJoin(PlayerJoinedEvent ev)
         {
+            ev.Player.SetRole(RoleTypeId.Spectator);
         }
 
         [PluginEvent(ServerEventType.PlayerDeath)]
