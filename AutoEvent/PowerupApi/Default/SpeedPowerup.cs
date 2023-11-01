@@ -22,9 +22,9 @@ public sealed class SpeedPowerup : Powerup
 {
     public override string Name { get; protected set; } = "Speed";
     public override string Description { get; protected set; } = "Gives a player a temporary speed boost";
-    protected override string SchematicName { get; set; } = "Bepis";
-    protected override Vector3 SchematicScale { get; set; } = new Vector3(3, 3, 3);
-    protected override Vector3 ColliderScale { get; set; } = new Vector3(0.3f, 0.3f, 0.3f);
+    protected override string SchematicName { get; set; } = "Speed";
+    protected override Vector3 SchematicScale { get; set; } = new Vector3(1, 1, 1);
+    protected override Vector3 ColliderScale { get; set; } = new Vector3(1f, 1f, 1f);
 
     public SpeedPowerup()
     {

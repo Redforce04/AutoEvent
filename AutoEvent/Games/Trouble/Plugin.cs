@@ -8,6 +8,7 @@ using Event = AutoEvent.Interfaces.Event;
 using Player = PluginAPI.Core.Player;
 using System;
 using System.Collections.Generic;
+using MEC;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles.PlayableScps.Scp3114;
@@ -32,7 +33,6 @@ namespace AutoEvent.Games.Trouble
         { SoundName = "Skeleton.ogg", Volume = 5, Loop = true };
         protected override float PostRoundDelay { get; set; } = 10f;
         private EventHandler EventHandler { get; set; }
-        private TroubleTranslate Translation { get; set; } = AutoEvent.Singleton.Translation.TroubleTranslate;
 
         protected override void RegisterEvents()
         {
@@ -86,11 +86,17 @@ namespace AutoEvent.Games.Trouble
             {
                 Player traitor = Player.GetPlayers().RandomItem();
                 Extensions.SetRole(traitor, PlayerRoles.RoleTypeId.Scp3114, PlayerRoles.RoleSpawnFlags.AssignInventory);
+                if (traitor.RoleBase is not Scp3114Role scpRole ||
+                    !scpRole.SubroutineModule.TryGetSubroutine<Scp3114Disguise>(out var disguise) || 
+                    disguise is null)
+                    continue;
+                /*disguise._identity.CurIdentity = new Scp3114Identity.StolenIdentity()
+                {
+                    
+                }*/
             }
-            Player traitor = Player.GetPlayers().RandomItem();
-            Extensions.SetRole(traitor, PlayerRoles.RoleTypeId.Scp3114, PlayerRoles.RoleSpawnFlags.AssignInventory);
-            //if (traitor.RoleBase is PlayerRoles.PlayableScps.Scp3114.Scp3114Role scpRole)
-            //    scpRole._identity;
+            // Player traitor = Player.GetPlayers().RandomItem();
+            // Extensions.SetRole(traitor, PlayerRoles.RoleTypeId.Scp3114, PlayerRoles.RoleSpawnFlags.AssignInventory);
         }
 
         protected override bool IsRoundDone()

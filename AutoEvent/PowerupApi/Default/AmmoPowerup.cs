@@ -38,10 +38,10 @@ public class AmmoPowerup : Powerup
     }
     public override string Name { get; protected set; } = "Ammo";
     public override string Description { get; protected set; } = "Gives a player ammo.";
-    protected override string SchematicName { get; set; } = "5.56";
-    protected override Vector3 SchematicScale { get; set; } = new Vector3(20, 20, 20);
-    protected override Vector3 ColliderScale { get; set; } = new Vector3(0.1f, 0.1f, 0.1f);
-    public override float PowerupDuration { get; protected set; } = 0;
+    protected override string SchematicName { get; set; } = "Ammo";
+    protected override Vector3 SchematicScale { get; set; } = new Vector3(1, 1, 1);
+    protected override Vector3 ColliderScale { get; set; } = new Vector3(1f, 1f, 1f);
+    public override float PowerupDuration { get; protected set; } = -1;
     public Dictionary<ItemType, ushort> AmmoToGive { get; set; }
 
     protected override void OnApplyPowerup(Player ply)
