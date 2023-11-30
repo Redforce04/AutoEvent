@@ -27,12 +27,14 @@ public abstract class Powerup
     /// <summary>
     /// Initializes a new <see cref="Powerup"/>. 
     /// </summary>
-    public Powerup()
+    public Powerup(bool autoRegister = true)
     {
         ActivePlayers = new Dictionary<Player, float>();
         Schematics = new List<SchematicObject>();
+        if (autoRegister)
+            PowerupManager.RegisterPowerup(this);
     }
-
+    
     /// <summary>
     /// The name of the <see cref="Powerup"/>. If another <see cref="Powerup"/> is found by the same name, it will become "name-1"
     /// </summary>
@@ -44,14 +46,26 @@ public abstract class Powerup
     public abstract string Description { get; protected set; }
 
     /// <summary>
+    /// The id of the powerup.
+    /// </summary>
+    public int Id { get; private set; } = 0;
+
+    internal void SetId(int id)
+    {
+        if (Id != 0)
+            return;
+        Id = id;
+    }
+
+    /// <summary>
     /// How long the <see cref="Powerup"/> should last. Set to -1 to disable the duration system (Non-Reversible Powerups).
     /// </summary>
     public virtual float PowerupDuration { get; protected set; } = -1;
-    
+
     /// <summary>
     /// The name of the schematic to spawn for the <see cref="Powerup"/>.
     /// </summary>
-    protected virtual string SchematicName { get; set; }
+    protected virtual string SchematicName { get; set; } = "";
     
     /// <summary>
     /// The scale of the <see cref="Powerup"/>. This makes the <see cref="SchematicObject"/> bigger or smaller when spawned. 
@@ -72,6 +86,23 @@ public abstract class Powerup
     /// A list of <see cref="Player">Players</see> that have this effect active. This can be disabled by setting the <see cref="PowerupDuration"/> to a negative amount.
     /// </summary>
     public Dictionary<Player, float> ActivePlayers { get; internal set; }
+
+    /// <summary>
+    /// Called when the powerup is registered.
+    /// </summary>
+    protected internal virtual void OnRegistering()
+    {
+        
+    }
+
+    
+    /// <summary>
+    /// Called when the powerup is being unregistered.
+    /// </summary>
+    protected internal virtual void OnUnregistering()
+    {
+        
+    }
     
     /// <summary>
     /// Called when a player collides with the object.

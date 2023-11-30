@@ -1,4 +1,5 @@
-﻿using Powerups;
+﻿using Mirror;
+using Powerups;
 
 namespace Powerups
 {
@@ -18,6 +19,7 @@ namespace Powerups
             CosturaUtility.Initialize();
             var powerupManager = new PowerupManager();
             Debug = debug;
+            
         }
 
         private static bool _initialized = false;

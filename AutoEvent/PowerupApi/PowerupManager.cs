@@ -78,7 +78,41 @@ public sealed class PowerupManager
     /// <summary>
     /// A list of all registered powerups.
     /// </summary>
-    public static List<Powerup> RegisteredPowerups { get; set; }
+    public static List<Powerup> RegisteredPowerups { get; set; } = new List<Powerup>();
+
+    public static void RegisterPowerup(Powerup powerup)
+    {
+        if (RegisteredPowerups.Contains(powerup))
+        {
+            Log.Debug($"A powerup cannot be registered twice. You can have multiple instances, but can only register each instance once.");
+            return;
+        }
+
+        powerup.SetId(RegisteredPowerups.Count);
+        RegisteredPowerups.Add(powerup);
+        try
+        {
+            powerup.OnRegistering();
+        }
+        catch (Exception e)
+        {
+            Log.Debug($"Error while registering powerup. Exception: \n {e}");
+        }
+    }
+
+    public static void UnregisterPowerup(Powerup powerup)
+    {
+        if(RegisteredPowerups.Contains(powerup))
+            RegisteredPowerups.Remove(powerup);
+        try
+        {
+            powerup.OnUnregistering();
+        }
+        catch (Exception e)
+        {
+            Log.Debug($"Error while un-registering powerup. Exception: \n {e}");
+        }
+    }
 
     /// <summary>
     /// Gets a <see cref="Powerup"/> by its type.

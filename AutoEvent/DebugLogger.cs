@@ -26,13 +26,15 @@ namespace AutoEvent;
 
 public class DebugLogger
 {
-    static DebugLogger()
+    static DebugLogger() 
     {
         Assemblies = new List<AssemblyInfo>();
     }
     public static DebugLogger Singleton;
     internal static List<AssemblyInfo> Assemblies { get; set; }
-    internal static string SLVersion { get; set; }
+    internal static string SLVersion => GameCore.Version.VersionString;
+    public static bool NoRestartEnabled { get; set; } = false;
+    public const string Version = "9.2.2";
     public DebugLogger(bool writeDirectly)
     {
         Singleton = this;
@@ -58,7 +60,6 @@ public class DebugLogger
                 }
 
                 File.Create(_filePath).Close();
-                Timing.CallDelayed(5f, () => { _getPlugins(); });
             }
         }
         catch (Exception e)
@@ -67,37 +68,7 @@ public class DebugLogger
             DebugLogger.LogDebug($"{e}");
         }
     }
-
-    private void _getPlugins()
-    {
-
-        string text = "";
-
-        text += $"Plugin Api Info: \n";
-        SLVersion = $"SCP SL Version: v{GameCore.Version.Major}.{GameCore.Version.Minor}.{GameCore.Version.Revision}, (Backwards Compatible: {GameCore.Version.BackwardCompatibility}, Backward Revision: {GameCore.Version.BackwardRevision})";
-        text += $"  {SLVersion}";
-        text += $"  Version: ({PluginApiVersion.Version}, {PluginApiVersion.VersionStatic}, {PluginApiVersion.VersionString})\n";
-        text += $"  VersionString: \n";
-        text += $"NWApi Plugins Present: \n";
-        text += _getNWApiPlugins();
-        /*Plugins Present:
-         *  MapEditorReborn.dll
-         *    Assembly Hash: 142wesdvsdfsg
-         *    Assembly Plugins:
-         *      - MapEditorReborn by Micheal (v1.0.0)
-         */
-
-        
-        
-        text += "Exiled Plugins Present:\n";
-        if (!Loader.isExiledPresent())
-            text += $"  Exiled Not Installed.\n";
-        else
-            text += _getExiledPlugins();
-
-        File.AppendAllText(_filePath, text);
-    }
-
+    
     private static string _getNWApiPlugins()
     {
         string text = "";
@@ -320,10 +291,10 @@ public class DebugLogger
 
 public enum LogLevel
 {
-    Info,
-    Debug,
-    Warn,
-    Error,
+    Debug = 0,
+    Warn = 1,
+    Error = 2,
+    Info = 3,
 }
 
 

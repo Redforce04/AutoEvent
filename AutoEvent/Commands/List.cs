@@ -18,7 +18,7 @@ namespace AutoEvent.Commands
             // Log.Debug("Skipping Registering List Command");
         }
         public string Command => nameof(List);
-        public string Description => "Shows a list of all the events that can be started.";
+        public string Description => "Shows a list of all the events that can be started";
         public string[] Aliases => new string[] { };
         public string Permission { get; set; } = "ev.list";
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -28,6 +28,7 @@ namespace AutoEvent.Commands
                 response = "<color=red>You do not have permission to use this command!</color>";
                 return false;
             }
+            
             StringBuilder builder = new StringBuilder();
             if (!IsConsoleCommandSender)
             {
@@ -38,6 +39,9 @@ namespace AutoEvent.Commands
                 builder.AppendLine("\"List of events:");
             }
 
+            string colorWhite = IsConsoleCommandSender ? "" : "<color=white>";
+            string colorReset = IsConsoleCommandSender ? "" : "</color>";
+
             // ReSharper disable once SuspiciousTypeConversion.Global
             Dictionary<string, List<Event>> events = new Dictionary<string, List<Event>>()
             {
@@ -47,9 +51,9 @@ namespace AutoEvent.Commands
                 //{ "cedmod", new List<Event>() },
                 //{ "riptide", new List<Event>() },
             };
-            events["Internal Events"] = Event.Events.Where(ev => ev is IInternalEvent).OrderBy(x => x.Name).ToList();
-            events["External Events"] = Event.Events.Where(ev => ev is not IInternalEvent && ev is not IExiledEvent).OrderBy(x => x.Name).ToList();
-            events["Exiled Events"] = Event.Events.Where(ev => ev is IExiledEvent).OrderBy(x => x.Name).ToList();
+            events["Internal Events"] = Event.Events.Where(ev => ev is IInternalEvent && ev is not IHiddenCommand).OrderBy(x => x.Name).ToList();
+            events["External Events"] = Event.Events.Where(ev => ev is not IInternalEvent && ev is not IExiledEvent && ev is not IHiddenCommand).OrderBy(x => x.Name).ToList();
+            events["Exiled Events"] = Event.Events.Where(ev => ev is IExiledEvent && ev is not IHiddenCommand).OrderBy(x => x.Name).ToList();
             //events["cedmod"] = Event.Events.Where(ev => ev is IInternalEvent).OrderBy(x => x.Name).ToList();
             // events["riptide"] = Event.Events.Where(ev => ev is IInternalEvent).OrderBy(x => x.Name).ToList();
             foreach (KeyValuePair<string, List<Event>> eventlist in events)
@@ -57,7 +61,6 @@ namespace AutoEvent.Commands
                 string color = "white";
                 switch (eventlist.Key)
                 {
-
                     case "Internal Events":
                         color = "red";
                         builder.AppendLine($"{(!IsConsoleCommandSender ? "<color=white>" : "")}[{(!IsConsoleCommandSender ? $"<color={color}>" : "")}==AutoEvent Events=={(!IsConsoleCommandSender ? "<color=white>" : "")}]");
@@ -75,14 +78,21 @@ namespace AutoEvent.Commands
                         builder.AppendLine($"{(!IsConsoleCommandSender ? "<color=white>" : "")}[{(!IsConsoleCommandSender ? $"<color={color}>" : "")}==Exiled Events=={(!IsConsoleCommandSender ? "<color=white>" : "")}]");
                         break;
                 }
-
+                
                 foreach (Event ev in eventlist.Value)
                 {
-                    
-
+                    string tags = "";
+                    if (ev is ITag tagList)
+                    {
+                        foreach (var item in tagList.Tags)
+                        {
+                            tags += $" {colorWhite}[{(IsConsoleCommandSender ? $"<color={item.Color.ToString()}>" : "")}{item}{colorWhite}]{colorReset}";
+                        }
+                    }
+                    if (ev is IHidden) continue;
                     if (!IsConsoleCommandSender)
                         builder.AppendLine(
-                            $"<color={color}>{ev.Name}</color> [<color=yellow>{ev.CommandName}</color>]: <color=white>{ev.Description}</color>");
+                            $"<color={color}>{ev.Name}</color> [<color=yellow>{ev.CommandName}</color>]{tags}: <color=white>{ev.Description}</color>");
                     else
                         builder.AppendLine($"{ev.Name} [{ev.CommandName}]: {ev.Description}");
                 }
@@ -103,6 +113,5 @@ namespace AutoEvent.Commands
             response = builder.ToString();
             return true;
         }
-
     }
 }

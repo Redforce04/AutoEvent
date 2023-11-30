@@ -12,6 +12,7 @@ using AutoEvent.Events.Handlers;
 using AutoEvent.Games.Example;
 using AutoEvent.Games.Infection;
 using AutoEvent.Interfaces;
+using InventorySystem.Items.MarshmallowMan;
 using Event = AutoEvent.Interfaces.Event;
 
 namespace AutoEvent.Games.Knives
@@ -22,8 +23,12 @@ namespace AutoEvent.Games.Knives
         public override string Description { get; set; } = AutoEvent.Singleton.Translation.KnivesTranslate.KnivesDescription;
         public override string Author { get; set; } = "KoT0XleB";
         public override string CommandName { get; set; } = AutoEvent.Singleton.Translation.KnivesTranslate.KnivesCommandName;
-        public override Version Version { get; set; } = new Version(1, 0, 0);
-        [EventConfig]
+        public override Version Version { get; set; } = new Version(1, 0, 1);
+        protected override FriendlyFireSettings ForceEnableFriendlyFire { get; set; } = FriendlyFireSettings.Disable;
+
+        protected override FriendlyFireSettings ForceEnableFriendlyFireAutoban { get; set; } = FriendlyFireSettings.Disable;
+
+        [EventConfig] 
         public KnivesConfig Config { get; set; }
         public MapInfo MapInfo { get; set; } = new MapInfo()
             {MapName = "35hp_2", Position = new Vector3(5f, 1030f, -45f), };
@@ -68,7 +73,7 @@ namespace AutoEvent.Games.Knives
             var count = 0;
             foreach (Player player in Player.GetPlayers())
             {
-                if (count % 2 == 0)
+                if (UnityEngine.Random.Range(0,2) == 1)
                 {
                     player.GiveLoadout(Config.Team1Loadouts, LoadoutFlags.IgnoreWeapons | LoadoutFlags.IgnoreGodMode);
                     // Extensions.SetRole(player, RoleTypeId.NtfCaptain, RoleSpawnFlags.None);
@@ -82,11 +87,15 @@ namespace AutoEvent.Games.Knives
                 }
                 count++;
 
-                var item = player.AddItem(ItemType.Jailbird);
-                Timing.CallDelayed(0.1f, () =>
+                if (Config.HalloweenMelee)
                 {
-                    player.CurrentItem = item;
-                });
+                    player.EffectsManager.EnableEffect<MarshmallowEffect>();
+                }
+                else
+                {
+                    var item = player.AddItem(ItemType.Jailbird);
+                    Timing.CallDelayed(0.1f, () => { player.CurrentItem = item; });
+                }
             }
         }
 
